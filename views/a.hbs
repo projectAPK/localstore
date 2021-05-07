@@ -1,0 +1,106 @@
+	{{>sh}}
+
+<div class="inner-block">
+    <div class="product-block">
+    	<div class="pro-head">
+    		<h2>Products</h2>
+    	</div>
+
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>sidebar}}
+	<div class="clearfix"> </div>
+</div>
+
+<!--slide bar menu end here-->
+
+<!--scrolling js-->
+    <script src="./jquery.min.js"></script>
+		<script src="./admin-js/jquery.nicescroll.js"></script>
+    <script src="./admin-js/bootstrap.js"></script>
+		<script src="./admin-js/scripts.js"></script>
+		<script type="text/javascript" src="./admin-js/nivo-lightbox.min.js"></script>
+			
+
+
+<script type="application/x-javascript"> 
+				  
+	$(document).ready(function() {
+			  var navoffeset=$(".header-main").offset().top;
+			  $(window).scroll(function(){
+				  var scrollpos=$(window).scrollTop(); 
+				  if(scrollpos >=navoffeset){
+					   $(".header-main").addClass("fixed");
+				  }else{
+					   $(".header-main").removeClass("fixed");
+				   }
+			  });
+         $('#nivo-lightbox-demo a').nivoLightbox({ effect: 'fade' });
+         var toggle = true;
+            
+        $(".sidebar-icon").click(function() {                
+          if (toggle){
+              $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+              $("#menu span").css({"position":"absolute"});
+          }else{
+              $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+              setTimeout(function() {
+                 $("#menu span").css({"position":"relative"});
+              }, 400);
+           }               
+              toggle = !toggle;
+          });
+			 
+	});
+
+    addEventListener("load", function() { 
+      setTimeout(hideURLbar, 0); }, false);
+      function hideURLbar(){ window.scrollTo(0,1); } 
+  function loadproducts(){
+  
+ 
+    $.ajax({
+      url:'/load-all-shop-products',
+      type:"POST",
+      success:function(data){
+      let output=`<div class="product-block">
+    	<div class="pro-head">
+    		<h2>Products</h2>
+    	</div>`
+      
+      data.forEach(ele=>{
+        output=output.concat(`<div class="col-md-3 product-grid">
+    		<div class="product-items">
+	    		    <div class="project-eff">
+						<div id="nivo-lightbox-demo"> <p> <a href="images/pro1.jpg"data-lightbox-gallery="gallery1" id="nivo-lightbox-demo"><span class="rollover1"> </span> </a></p></div>     
+							<img class="img-responsive" src="${ele.productId.images[0]}"alt="">
+					</div>
+	    		<div class="produ-cost">
+	    			<h4>${ele.productId.product}</h4>
+	    			<h5>Rs.${ele.total_price}</h5>
+	    		</div>
+    		</div>
+    	</div>`);
+      })
+      output=output.concat(`</div>`)
+      $('.inner-block').html(output)
+      }
+    })
+  }
+  loadproducts()
+ </script>
+</body>
+</html>
+
+
+                      
+						

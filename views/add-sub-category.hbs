@@ -1,0 +1,96 @@
+
+<link rel="stylesheet" href="./popupstyle.css"> 
+	{{>admin_header}}
+
+<div class="inner-block">
+    <div class="product-block">
+    	<div class="pro-head" >
+    		<h2>Add Sub-Category</h2>
+    	</div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                 <form action="/sub-category"  method="POST" id='input-form'  >
+                <p id='msg'></p>
+                 <div class="form-group">
+                 <label>Select Category</label>
+                 <select name='categoryname' id='category' class="form-control">
+                 <option selected disabled>Select Category</option>
+                 </select>
+                 </div>
+                 <div class="form-group">
+                 <label for="Add-category">Add Sub-Category</label>
+                 <input type="text" class="form-control" name='sub_cat_name[]' id="sub-category-name"  placeholder="Enter Category Name">
+                   <br>
+                 <input type="text" class="form-control" name='sub_cat[]' id="add-category"  placeholder="Enter Category">
+                  <a href="#" style="padding:5px;border-radius:50%;"class='more-category-btn' id='more-category-btn'><i class="fa fa-plus"></i>&nbsp;Add more Category</a>
+                 </div>
+                 <div class="form-group more-category-field" style="display: none;">
+                 <label for="add-standerd">Sub-Category Name</label>
+                  <input type="text" class="form-control" name="sub_cat_name[]" id="category_name"  placeholder="Enter Category Name">
+                   <br>
+                 <input type="text" class="form-control" name="sub_cat[]" id="add-more-category"  placeholder="Enter Category[ ]">
+                 <a href="#" class="close-category"><i class="fa fa-minus"></i>&nbsp;Close sub-category</a>
+                  </div>
+                 <div class="form-group">
+                 <label for="add-standerd">Material Standard</label>
+                 <input type="text" class="form-control" name="sat" id="add-sat"  placeholder="Enter Material Satndard">
+                  </div>
+                 
+                 <button type="submit" class="btn btn-primary add-sub-category">Add</button>
+                 </form>
+            </div>
+            <div class="col-md-1">
+
+            </div>
+            <div class="col-md-6"  style="background-color:white;padding:10px;">
+              <h3  id="form-heading" style="text-align: center;" >List of Sub-Categories</h3>
+               <div class="form-group">
+                 <label>Select Category</label>
+                 <select name='categoryname' id='load_category' class="form-control">
+                 <option selected disabled>Select Category</option>
+                 </select>
+                 </div>
+              <hr>
+              <div class="load-category" style="overflow-x: scroll;padding:1rem;" >
+                  
+              </div>
+             
+            </div>
+        </div>
+    </div>
+<div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>admin_sidebar}}
+	<div class="clearfix"> </div>
+</div>
+ 
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  
+ 
+
+</div>
+</body>
+
+    
+<script src="./jquery.min.js"></script>
+<script src="./sub-category.js"></script>
+
+
+ 
+</body>
+</html>

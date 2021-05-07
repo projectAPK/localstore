@@ -1,0 +1,333 @@
+
+    <!-- Navbar -->
+    {{>header}}
+
+    
+  <title>Welcome to Your history Page</title>
+    <div class="jumbotron color-grey-light mt-70">
+      <div class="d-flex align-items-center h-100">
+        <div class="container text-center py-5">
+          <h2 class="mb-0"><b>HISTORY PAGE</b></h2>
+        </div>
+      </div>
+    </div>
+
+  </header>
+  <!--Main Navigation-->
+
+  <!--Main layout-->
+  <main>
+    <div class="container">
+
+      <!--Section: Block Content-->
+      <section class="mt-5 mb-4">
+
+        <!--Grid row-->
+        <div class="row">
+
+          <!--Grid column-->
+          <div class="col-lg-8">
+
+            <!-- Card -->
+            <div class="card wish-list mb-4">
+              <div class="card-body history-body">
+
+                
+              
+           
+
+              </div>
+            </div>
+            <!-- Card -->
+
+          
+
+          </div>
+          <!--Grid column-->
+
+          <!--Grid column-->
+          <div class="col-lg-4">
+
+            <!-- Card -->
+            <div class="card mb-4">
+              <div class="card-body rlt-product">
+
+              
+              </div>
+            </div>
+            <!-- Card -->
+
+
+          </div>
+          <!--Grid column-->
+
+        </div>
+        <!--Grid row-->
+
+      </section>
+      <!--Section: Block Content-->
+
+    </div>
+  </main>
+ 
+ {{>footer}}
+    <script src="./jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+    
+    <script>
+      $(document).ready(function(){
+      function history(){ 
+        $.ajax({
+          url:'/order-history',
+          type:"POST",
+          success:function(data){
+             if(data==1){
+          let msg=` <p id='order-msg' style="font-size:larger;
+                    color:black;
+                    border:1px solid #ddd ;
+                    padding:10px;
+                    text-align:center;
+                    background-color:lightgrey;">No History Yet</p> `;
+                                     $('.history-body').html(msg);
+                                     return;
+          }
+          
+           let shoplist=Array()
+           let datelist=Array()
+           let product=Array()
+           let output=''
+         data.forEach(e=>{
+                    
+        if(!shoplist.includes(e.shopId.shopname)){
+           shoplist.push(e.shopId.shopname)
+          } 
+         })
+         data.forEach(e=>{
+          if(!datelist.includes(e.date_time)){
+           datelist.push(e.date_time)
+          } 
+         })
+
+         datelist.forEach(datewise=>{
+           output=output.concat(`<h5 class="mb-4" style='text-align:center';>Date: (<span>${datewise}</span>)</h5>`);
+           data.forEach(ele=>{
+            
+          if(datewise==ele.date_time){
+         shoplist.forEach(shop=>{
+              let cnt=1;
+        data.forEach(element => {
+          if(shop==element.shopId.shopname && datewise==element.date_time && (!product.includes(element._id))){   
+           product.push(element._id) 
+        if(cnt==1){
+        output=output.concat(`<h5 class="mb-4" style='text-align:center;'><span>${element.shopId.shopname}</span><br></h5><button class='btn btn-primary' id='getbill' data-user='${element.userId}' data-shop='${element.shopId._id}' data-date='${element.date_time}' style='margin-left:35rem;height:1rem;line-height:0.2rem;'>Bill</button>`);
+        }
+        cnt++;
+       output=output.concat(`<hr class="mb-4">
+      <div class="row mb-4">
+      <div class="col-md-5 col-lg-3 col-xl-3">
+        <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+          <img class="img-fluid w-100"
+            src="${element.productId.images[0]}" alt="Sample">
+          <a href="#!">
+            <div class="mask waves-effect waves-light">
+              <img class="img-fluid w-100"
+                src="${element.productId.images[0]}">
+              <div class="mask rgba-black-slight waves-effect waves-light"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-md-7 col-lg-9 col-xl-9">
+        <div>
+          <div class="d-flex justify-content-between">
+            <div>
+              <h5 style='width:100%;'>${element.productId.product}</h5>
+              <p class="mb-3 text-muted text-uppercase small"><b>${element.category.categoryname}</b></p>`);
+              if(element.sub_category.category_name!='kg'){
+             let i=0
+                element.sub_category.category_name.forEach(cat=>{
+
+                    output=output.concat(`
+                <p class="mb-2 text-muted text-uppercase small"><b>${cat}</b>:${element.sub_category.category_value[i]}</p>
+                `)
+                i++;
+                    })
+                     output=output.concat(`
+                <p class="mb-2 text-muted text-uppercase small"><b>Qty</b>:${element.qty}</p>
+                `)
+   
+              }else{
+                output=output.concat(`
+                <p class="mb-2 text-muted text-uppercase small"><b>${cat}</b>:${element.sub_category.category_value}</p>
+                `)
+               
+              
+                  
+    
+              }
+            output=output.concat(`</div>
+           
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <a href="#!" type="button" id='remove-order'   class="card-link-secondary small text-uppercase mr-3"><i
+                  class="fas fa-calender mr-1"></i><b>${element.date_time}</b></a>
+              
+            </div>
+            `);
+            let amt=parseFloat(element.price).toFixed(2)
+           output=output.concat(`<p class="mb-0"><span id='totalprice'><strong>Rs.${amt}</strong></span></p>
+           
+          </div>
+ <a href='#' data-id='${element._id}' id='clear-history' style:'margin-right:-15rem;'><i class='fa fa-trash' style='padding:0.5rem;width:2rem;color:red;'></i></a>         
+        </div>
+      </div>
+    </div>
+      
+   
+    `);
+      }
+        });
+           output=output.concat(`</div>`);
+
+         });
+          }
+         })
+        })
+  
+
+   output=output.concat(`<p class="text-primary mb-0">.</p>`)
+    $('.history-body').html(output);
+}
+})
+}
+history()
+$(document).on('click','#clear-history',function(){
+  let id=$(this).data('id');
+  let ans=confirm('Are You sure you want to remove this item?');
+  if(ans){
+  $.ajax({
+    url:'/clear-history',
+    type:'POST',
+    data:{id},
+    success:function(data){
+      if(data){
+        history()
+      }
+
+
+    }
+  })
+  }
+})
+$(document).on('click','#getbill',function(){
+ let date=$(this).data('date');
+ let shop=$(this).data('shop')
+ let userId=$(this).data('user')
+   
+   
+
+  $.ajax({
+    url:'/genrate-bill',
+    type:'POST',
+    data:{date,shop,userId},
+    success:function(data){
+    if(data){
+    	    let c=1
+          let totalprice=0
+                      let output=`<h2 style='text-align:center;background-color:#10A2E5;padding:1rem;'><b> INVOICE</b></h2><hr>
+                     <div class='row' style='border:1px solid black;height:20rem;font-family:verdana'>
+                      <div class='col-md-5'style='text-align: justify;width:23rem;float:left;margin:1rem;border-right:1px solid black;'>
+                        <h5>${data[0].shopId.shopname.toUpperCase()}</h5>
+                        <h5>${data[0].shopId.address}</h5>
+                        <h5>${data[0].shopId.city},${data[0].shopId.state}</h5>
+                      </div>
+                      <div class='col-md-6'style='text-align: justify;margin:1rem;'>
+                        <h5><b>${data[0].userId.name.toUpperCase()}</b></h5>
+                        <h5><b>Email:</b>${data[0].userId.email}</h5>
+                        <h5><b>Order Date:</b>${data[0].date_time}</h5>
+                        <h5><b>Address:</b>${data[0].customerId.Address}</h5>
+                        <h5><b>Mo no.:</b>${data[0].customerId.mobile_no}</h5>
+                        
+
+                      </div>
+                      </div>
+                      <table id='bill-table' style='padding:5px;'><tr style='margin-bottom:3rem;font-family:verdana''>
+                          <th  style='width:5rem;border-bottom:1px solid grey;'>Sr No</th>
+                          <th  style='width:25rem;border-bottom:1px solid grey;'>Product</th>`
+                      
+                            output=output.concat(`<th style='width:3rem;border-bottom:1px solid grey;'>Qty</th>
+                                                  <th style='width:3rem;border-bottom:1px solid grey;'>Gst(%)</th>
+                                                  <th style='width:5rem;border-bottom:1px solid grey;'>Price</th></tr>`)
+                    data.forEach(ele=>{
+                        
+                           
+                           totalprice=totalprice+parseInt(ele.price);
+                          
+                           output=output.concat(`<tr style='text-align:center;'><td>${c}</td>
+                                
+                                                    <td>${ele.productId.product}</td>
+                                                    <td>${ele.shopproductid.gst}</td>`)
+                                                  
+                                                    output=output.concat(`<td>${ele.qty}</td>
+                                                                         <td>${Math.floor(ele.price)}</td></tr>`);
+                      
+c++;
+                    })
+                    output=output.concat(`<table><div class='row' style='border-top:1px solid grey;margin-top:1rem;'></div>
+                    <div class='row' style='height:1rem;padding:2px;'>
+                      <div style='float:left;width:78%;'>Total Amount</div>
+                      <div style='text-align:center;float:right;width:20%;'>Rs.${totalprice}</div>
+                    </div>`);
+    let windowToPrint = window.open("");   
+    
+    windowToPrint.document.write(output);
+    windowToPrint.print();
+    windowToPrint.close();
+     
+    }
+
+    }
+  })
+})
+function loadrandom(){
+  $.ajax({
+    url:'/related-product',
+    type:"POST",
+    success:function(data){
+      let output='<h4>Related Products</h4>'
+      data.forEach(ele=>{
+        output=output.concat(`
+             <div style='padding:1px;'>
+                <h5 class="mb-3"></h5>
+
+                <ul class="list-group list-group-flush">
+              
+                  <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                    <div>
+                     
+                      <strong >
+                       <a href='/more-information-product?productid=${ele._id}'><img src=${ele.images[0]} style='width:5rem;heigth:5rem;'></a>
+                      </strong>
+                    </div>
+                    <span><strong>${ele.product}</strong></span>
+                  </li>
+                </ul>
+                </div> 
+                <hr>
+`);
+
+      })
+      $('.rlt-product').html(output);
+
+    }
+  })
+}
+   loadrandom()
+   
+});
+
+    </script>
+
+</body>
+</html>

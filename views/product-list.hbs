@@ -1,0 +1,98 @@
+{{>header}}
+
+<link rel="stylesheet" href="./pr.css">
+ <br><br><br>
+ <main>
+  
+    <div class="container">
+    
+ <section class="text-center">
+
+        <h4 class="text-center my-5"><strong>Related products</strong></h4>
+
+        <!-- Grid row -->
+        <div class="row">
+
+          <!-- Grid column -->
+          {{#each data}}
+          <div class="col-md-6 col-lg-3 mb-5">
+
+            <!-- Card -->
+            <div class="">
+
+              <div class="view zoom overlay z-depth-2 rounded">
+                <img class="img-fluid w-100"
+                  src="{{this.images.[0]}}" alt="Sample"  style="height:15rem;width:15rem;">
+                <a href="#" id='product-img' data-id={{this._id}}>
+                  <div class="mask">
+                    <img class="img-fluid w-100"
+                      src="{{this.images.[0]}}">
+                    <div class="mask rgba-black-slight"></div>
+                  </div>
+                </a>
+              </div>
+
+              <div class="pt-4">
+
+                <h5>{{this.product}}</h5>
+         
+
+              </div>
+
+            </div>
+            <!-- Card -->
+
+          </div>
+          {{/each}}
+        </div>
+</section>
+</div>
+</main>
+
+{{>footer}}
+<div id="myModal" class="modal">
+    
+</div>
+<script src="./jquery.min.js"></script>
+<script>
+    $(document).on('click','#product-img',function(){
+      let id=$(this).data('id');
+      
+         $.ajax({
+           url:'/single-product',
+           type:'POST',
+           data:{id},
+           success:function(data){
+           
+           let output=''
+             if(data){
+   output=output.concat(`<div class="vh-100 d-flex justify-content-center align-items-center">
+    <div class="container d-flex justify-content-center">
+        <div class="card p-2">
+            <div class="p-info px-3 py-3">
+                <div>
+                    <h5 class="mb-0">${data[0].product}</h5> <span>${data[0].category.categoryname}</span>
+                </div>
+              
+                <div class="heart"> <i class="bx bx-heart"></i> </div>
+            </div>
+            <div class="text-center p-image"style='margin-right:-5rem;'> <img src="${data[0].images[0]}" style='height:10rem;'> </div>
+            <div class="p-about">
+                <h6 style='overflow-y:scroll;height:10rem;'>${data[0].description}</h6>
+            </div>
+            <div class="buttons d-flex flex-row gap-3 px-3"> <a href='/more-information-product?productid=${data[0]._id}'><button class="btn btn-primary w-100 view-product">View</button></a> </div>
+        </div>
+    </div>`)
+       $('.modal').html(output);
+       
+      $('.modal').show()
+             }
+             
+           }
+         })
+        
+    }); 
+    $(document).click(function(){
+     $('.modal').hide()
+})  
+</script>

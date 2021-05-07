@@ -1,0 +1,186 @@
+	{{>sh}}
+<link rel="stylesheet" href="./pr.css">
+<div class="inner-block" style='padding-top:10rem;overflow-y:scroll;height:40rem;'>
+    <div class="product-block">
+    	<div class="pro-head" style='height:50rem;padding-right:3rem;'>
+    		<h2>Products</h2>
+    	</div>
+
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>sidebar}}
+	<div class="clearfix"> </div>
+</div>
+<div id="myModal" class="modal">
+
+</div>
+<!--slide bar menu end here-->
+
+<!--scrolling js-->
+    <script src="./jquery.min.js"></script>
+		<script src="./admin-js/jquery.nicescroll.js"></script>
+    <script src="./admin-js/bootstrap.js"></script>
+		<script src="./admin-js/scripts.js"></script>
+		<script type="text/javascript" src="./admin-js/nivo-lightbox.min.js"></script>
+			
+
+
+<script type="application/x-javascript"> 
+				  
+	$(document).ready(function() {
+			  var navoffeset=$(".header-main").offset().top;
+			  $(window).scroll(function(){
+				  var scrollpos=$(window).scrollTop(); 
+				  if(scrollpos >=navoffeset){
+					   $(".header-main").addClass("fixed");
+				  }else{
+					   $(".header-main").removeClass("fixed");
+				   }
+			  });
+         $('#nivo-lightbox-demo a').nivoLightbox({ effect: 'fade' });
+         var toggle = true;
+            
+        $(".sidebar-icon").click(function() {                
+          if (toggle){
+              $(".page-container").addClass("sidebar-collapsed").removeClass("sidebar-collapsed-back");
+              $("#menu span").css({"position":"absolute"});
+          }else{
+              $(".page-container").removeClass("sidebar-collapsed").addClass("sidebar-collapsed-back");
+              setTimeout(function() {
+                 $("#menu span").css({"position":"relative"});
+              }, 400);
+           }               
+              toggle = !toggle;
+          });
+			 
+	});
+
+    addEventListener("load", function() { 
+      setTimeout(hideURLbar, 0); }, false);
+      function hideURLbar(){ window.scrollTo(0,1); } 
+  function loadproducts(){
+  
+ 
+    $.ajax({
+      url:'/load-all-shop-products',
+      type:"POST",
+      success:function(data){
+      let output=`<div class="product-block">
+    	<div class="pro-head">
+    		
+    	</div>`
+      
+      data.forEach(ele=>{
+        output=output.concat(`<div class="col-md-2 product-grid" data-id=${ele._id} style='width:15rem;height:8rem;margin-bottom:5rem;'>
+    		<div class="product-items">
+	    		    <div class="project-eff">
+						<div id="nivo-lightbox-demo"> <p> <a href="#"data-lightbox-gallery="gallery1" id="nivo-lightbox-demo"><span class="rollover1"> </span> </a></p></div>     
+							<img class="img-responsive" src="${ele.productId.images[0]}"alt="" style='width:16rem;height:8rem;'>
+					</div>
+	    		<div class="produ-cost">
+	    			<h6>${ele.productId.product}</h6>
+	    			<h6>Rs.${ele.total_price}</h6>
+	    		</div>
+    		</div>
+    	</div>`);
+      })
+      output=output.concat(`</div>`)
+      $('.pro-head').html(output)
+      }
+    })
+  }
+  loadproducts()
+
+  function details_product(){
+    $(document).on('click','.product-grid',function(){
+      let id=$(this).data('id');
+      $.ajax({
+        url:'/load-single-shop-product',
+        type:"POST",
+        data:{id},
+        success:function(data){
+          console.log(data);
+           let output=''
+             if(data){
+               data.forEach(ele=>{
+       output=output.concat(`   <div class'col-md-offset-3 col-md-2'></div>
+                <div class='close' style='margin-right:40px;float:right;'>X</div><div class="bg-dark vh-100 d-flex justify-content-center align-items-center">
+    <div class="container d-flex justify-content-center">
+        <div class="card p-2">
+            <div class="p-info px-3 py-3">
+                <div>
+                    <h5 class="mb-0">${ele.productId.product}</h5> <span>${ele.category.categoryname}</span>
+                </div>
+             
+              
+                <div class="heart"> <i class="bx bx-heart"></i> </div>
+            </div>
+            <div class="text-center p-image" style='margin-right:-5rem;'> <img src="${ele.productId.images[0]}" style='width:13rem;height:13rem;'> </div>
+            <div class="p-about">`);
+              output=output.concat(`<h5>Rs.${ele.total_price}</h5><br>`)
+              if(ele.sub_category.category_name!='kg'){
+                let i=0;
+                ele.sub_category.category_name.forEach(cat=>{
+                 output=output.concat(`<span><b>${cat}</b>: ${ele.sub_category.category_value[i]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`)
+                i++;
+                })
+                 output=output.concat(`<br><br><input type'number' id='qty' placeholder='Add Qty'><h5 style='color:red;'>Only *${ele.qty} left</h5>`)    
+              }else{
+                 output=output.concat(`<input type'number' id='qty' placeholder='Add Qty'><h5>${ele.sub_category.category_name}:${ele.qty}</h5>`);
+
+                 output=output.concat(`<h5 style='color:red;'>Only *${ele.qty} left</h5>`)
+              }
+                
+                output=output.concat(`<br><br><h5 style='margin-bottom:5px;height:8rem; overflow-y:scroll;'>${ele.productId.description}</h5>
+            </div>
+            <br>
+           
+            <div class="buttons btn btn-primary flex-row gap-1 px-3 add-qty" data-id=${ele._id} style='padding-top:0.6rem;'>Add</div>
+            
+        </div>
+    </div>`)
+               })
+       $('.modal').html(output);
+       
+      $('.modal').show()
+        }
+        }
+      })
+    })
+  }
+  details_product()
+  $(document).on('click','.close',function(){
+    $('.modal').hide()
+  });
+  
+  $(document).on('click','.add-qty',function(){
+     let id=$(this).data('id');
+     let qty=$('#qty').val();
+      $.ajax({
+        url:'/add-more-product',
+        type:"POST",
+        data:{id,qty},
+        success:function(data){
+         if(data){
+          details_product();
+          window.location.assign('/view-product');
+         }
+        }
+      })
+  })
+ </script>
+</body>
+</html>
+
+
+                      
+						

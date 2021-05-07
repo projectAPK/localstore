@@ -1,0 +1,206 @@
+{{>urls}}
+	{{>sh}}
+    
+
+<div class="inner-block" style='overflow-y:scroll;height:40rem;'>
+    <div class="product-block">
+    	<div class="pro-head">
+    		<h2>Products</h2>
+    	</div>
+           <section class="mb-5">
+
+        <div class="row">
+          <div class="col-md-4 mb-4 mb-md-0">
+
+            <div id="mdb-lightbox-ui"></div>
+
+            <div class="mdb-lightbox">
+
+              <div class="row product-gallery mx-1">
+
+                <div class="col-12 mb-0">
+                  <input type="hidden" id='shopid' value="">
+                <input type="hidden" id='product-category' value="{{data.[0].category._id}}">
+                 <input type="hidden" id='productid' value="{{data.[0]._id}}">
+               
+              
+               
+              
+                </div>
+                <div class="col-12">
+                  <div class="row">
+                  
+                    <div class="col-3">
+                      <div class="view overlay rounded z-depth-1 gallery-item hoverable">
+                        <img src="{{data.[0].productId.images.[0]}}"
+                          class="img-fluid" style="width:20rem;height:15rem;margin:auto;">
+                        <div class="mask rgba-white-slight"></div>
+                      </div>
+                    </div>
+                  
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="col-md-6">
+
+            <h5>{{data.[0].productId.product}}</h5>
+            <p class="mb-2 text-muted text-uppercase small">{{data.[0].category.categoryname}}</p>
+            <hr>    
+         
+            <p><span class="mr-1"><strong id='price'></strong></span><p><button class="btn btn-primary cnt-gst btn-md mr-1 mb-2" style="display: none;">Count Gst</button></p>
+            <p class="pt-1">{{data.[0].productId.description}}</p>
+            <div class="table-responsive">
+  
+            </div>
+        
+            <div class="table-responsive mb-2">
+              <table class="table-sm table-borderless">
+                <tbody>
+                  <tr>
+                    <td class="pl-0 pb-0 w-25"><b>Quantity</b></td>
+                    
+
+                  </tr>
+                  <tr>
+                    <td class="pl-0" id='category-load'>
+                      <div class="def-number-input number-input safari_only mb-0">
+              
+                <input class="quantity" min="0" id='qty' name="quantity" id='qty' value="{{data.[0].qty}}" type="number" readonly style="width:5rem;">
+             
+                    </div>
+                  </td>
+                    <td>
+                      <div class="mt-1">
+                      <p style="display: none;" id='category_name'>{{data.[0].sub_category.category_name}}</p>
+                      <p style="display: none;" id='category_value'>{{data.[0].sub_category.category_value}}</p>
+                                 
+                      <div class='sub_catagory_div'>
+                        
+                      </div>
+                      </div>
+                     
+                    </td>
+                     
+                                 
+                  </tr>
+                     <br>
+                  <tr>
+                  <td><h4><u>Customer Details</u></h4>
+                  <br>
+                  
+                                   <p><b>Name:-</b>{{data.[0].userId.name}}</p>
+                                   <p><b>Email:-</b>{{data.[0].userId.email}}</p>
+                                   <p><b>Mobile No:-</b>{{data.[0].customerId.mobile_no}}</p>
+                                   <p><b>City/State:-</b>{{data.[0].customerId.city}},{{data.[0].customerId.state}}</p>
+                                 <br>
+                         <h4><u>Delivery Address:</u></h4><br>
+                                    <p>{{data.[0].customerId.Address}},{{data.[0].customerId.area_code}}</p>
+                                   </td>
+
+                           <input type="hidden" id="city" value="{{data.[0].customerId.city}}">
+                                    <input type="hidden" id="state" value="{{data.[0].customerId.state}}">
+                                    <input type="hidden" id="custid" value="{{data.[0].customerId._id}}">
+                                    <input type="hidden" id="prodid" value="{{data.[0].productId._id}}">
+                                    <input type="hidden" id="ordid" value="{{data.[0]._id}}">
+                                
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <br>
+            <button type="button" class="btn btn-primary btn-md mr-1 mb-2" id='payment_btn' data-id="{{data.[0]._id}}">{{data.[0].payment}}</button>
+            <button type="button" class="btn btn-light btn-md mr-1 mb-2 cart" id='order-success'   data-id="{{data.[0]._id}}">{{data.[0].status}}</button>
+          </div>
+        </div>
+
+      </section>
+
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>sidebar}}
+	<div class="clearfix"> </div>
+</div>
+
+    <script src="./jquery.min.js"></script>
+    
+    <script>
+        $('.view-img').click(function(){
+             let src=$(this).attr('src');
+             const order_img=document.getElementById('order-img');
+          
+             order_img.src=src;
+        });
+      
+         
+    let category_name=$('#category_name').text();
+    
+      
+     let category_value=$('#category_value').text();
+    
+     category_name=category_name.split(',');
+     category_value=category_value.split(',');
+     let printCategory='<div>';
+        let sc=0;
+      category_name.forEach(name=>{
+         printCategory=printCategory.concat(`<label><b>${name}</b></label>:-<input type='number' value=${category_value[sc]} style='width:4rem;' readonly>`)
+         sc++;
+     }) 
+    printCategory=printCategory.concat('</div>');
+    $('.sub_catagory_div').append(printCategory);
+              
+       $('#payment_btn').click(function(){
+              var id=$(this).data('id');
+                  $.ajax({
+                      url:'/payment',
+                      type:"POST",
+                      data:{id,msg:'Complete'},
+                      success:function(data){
+                   
+                      }
+                  })
+       })
+       $(document).on('click','#order-success',function(){
+               
+               let status=$(this).text();
+              
+               if(status=='order accept'){
+                   status='Process';
+               }
+               else if(status=='Process'){
+                   status='Production';
+               }
+               else if(status=='Production'){
+                    status='Shipped';
+               }
+               else if(status=='Shipped'){
+                    status='Deliverd';
+
+               }
+                   
+                let oid=$(this).data('id');
+                  $.ajax({
+                      url:'/order-success',
+                      type:'POST',
+                      data:{oid,status},
+                      success:function(data){
+                          if(data==1){
+                        }
+                      }
+                  })
+            })
+    </script>
+   
+

@@ -1,0 +1,159 @@
+{{>admin_header}}
+<div class="inner-block">
+    <div class="product-block">
+    	<div class="pro-head" >
+    		<h2>Add Website Footer</h2>
+    	</div>
+
+
+           <div class="col-md-12">
+    
+          
+            <form>
+             
+            
+                   
+              
+             <div class="form-group col-sm-6">
+               
+
+                  <label for="product-name">Add link</label>
+                  <input type="text" class="form-control" name='add-link' id="link" placeholder="www...//">
+                </div>
+               <div class="form-group col-sm-6 ">
+               <label>Select Social media Links</label>
+               <select name='categoryname' id='medias' class="form-control">
+                 <option selected disabled>Select Media</option>
+                  <option value="fb">Facebook</option>
+                  <option value="ig">Instagram</option>
+                  <option value="li">Linked in</option>
+                  <option value="twt">Twiter</option>
+               </select>
+             </div>
+                 <div class="form-group col-sm-6">
+                  <label for="details">About us</label>
+                  <textarea type="text" class="form-control" name='aboutus' id="aboutus"></textarea>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>Offices</label>
+                     <textarea type="text" class="form-control" name='offices' id="office"></textarea>
+                </div>
+                 <div class="form-group col-sm-6">
+                    <label>Contact</label>
+                   <input type="number" name='number' class='form-control' id="number" placeholder="Number#">
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>Address</label>
+                   <input type="text" name='address' class='form-control' id="address" placeholder="Address">
+                </div>
+                
+           
+            <br>
+          
+                    &nbsp;&nbsp;&nbsp;&nbsp;<button  class="btn btn-primary" style='item-align:center;margin-bottom:20px;' id='add-footer'>Save</button>
+    
+            <p id='msg' style="width: 20rem;"></p>
+            </form>
+           
+       
+       
+       
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>admin_sidebar}}
+	<div class="clearfix"> </div>
+</div>
+
+         
+      
+<script src="./jquery.min.js"></script>
+<script>
+    let links=Object()
+    $('#medias').change(function(){
+     let media=$(this).val();
+     let val=$('#link').val();
+     if(val!=undefined || val!=''){
+       links[media]=val
+     
+
+       }
+      
+    })
+    $('#add-footer').click(function(e){
+      e.preventDefault()
+       function Close(endtime) {
+            setTimeout(() => {
+                $('#p-error').css("display","none");
+               
+            },endtime)
+        } 
+     
+        let about=$('#aboutus').val();
+        let office=$('#office').val();
+        let contact=$('#number').val();
+        let address=$('#address').val();
+        if(links.length>=0){
+            document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Enter links</p>`;
+            Close(5000)
+            return;
+  
+        }
+        if(about=='' || about==undefined){
+          document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Enter About...</p>`;
+            Close(5000)
+            return;
+  
+        }
+        if(office=='' || office==undefined){
+document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Enter Office</p>`;
+            Close(5000)
+            return;
+  
+        }
+        if(contact=='' ||contact==''){
+          document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Enter Contact ...</p>`;
+            Close(5000)
+            return;
+  
+
+        }
+        if(address='' || address==''){
+          document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Enter Address</p>`;
+            Close(5000)
+            return;
+  
+
+        }
+
+    fetch('/add-website-footer',{
+         method:'POST',
+         headers:{
+             'Content-Type':'application/json'
+         },
+         body:JSON.stringify({
+           about,
+           office,
+           contact,
+           address,
+           links
+         })
+
+}).then((err,data)=>{
+    $('#msg').html(`<p id='p-error' style="color:white;border:1px solid green;background-color:lightgreen;padding:3px;">Web footer added  Successfully..</p>`)
+        Close(2000);
+
+})
+})
+</script>
+
+</body>
+</html>

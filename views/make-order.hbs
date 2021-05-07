@@ -1,0 +1,133 @@
+{{>header}}
+
+<main>
+  
+<div class="container">
+    
+ <section class="text-center" style="margin: auto;">
+
+    <br><br><br>
+        <hr>
+
+        <!-- Grid row -->
+        <div class="row" id='product-load'>
+
+          <!-- Grid column -->
+          
+      
+          <div class="col-md-offset-3 col-md-6 col-lg-10 mb-9">
+<p id='msg'></p>
+             <form action='/customer' method='POST' class="row" id='productform' style="background-color: white;">
+                  <h5 style="text-align: center;background-color:#1e90ff;padding:15px;width:100%;"><b>Add Customer Details</b></h5>    
+                <div class="form-group col-sm-12">
+                           <input type="text" class="form-control" name="address" id="address" placeholder="Address*">
+                </div>
+                <div class="form-group col-sm-12">
+                     <input type="text" class="form-control" name='city' id="city" placeholder="City*">
+                </div>
+                <div class="form-group col-sm-12">
+                       <input type="text" class="form-control" name="state" id="state" placeholder="State*">
+                </div>
+                <div class="form-group col-sm-3">
+                          <input type="number" class="form-control" name='code' id="code" placeholder="Pincode#">
+                </div>
+                <div class="form-group col-sm-6">
+                          <input type="text" class="form-control" name='mobileNo'id="mobile" placeholder="Mobile No#">
+                </div>
+             
+           
+              <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary create-account" id='add-product'>Save And Make Order</button>
+    
+              </div>
+            </form>
+
+            
+            </div>
+            <!-- Card -->
+
+          </div>
+         
+        </div>
+</section>
+</div>
+</main>
+        
+<script src="./jquery.min.js"></script>
+<script>
+  $('#productform').submit(function(e){
+    let address=$('#address').val()
+    let city=$('#city').val()
+    let state=$('#state').val()
+    let code=$('#code').val()
+    let mobile=$('#mobile').val();
+      var pat1=/^\d{6}$/;
+      var pattern=/^([0-9](10,10))+$/;
+        function Close(endtime) {
+            setTimeout(() => {
+                $('#p-error').css("display","none");
+               
+            },endtime)
+        } 
+    if(address=='' || address==undefined){
+        document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter Address</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+    }
+    if(city==''){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter city</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+
+    }
+    if(state==''){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter state</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+
+    }
+    if(code==''){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter Pincode</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+
+    }else if(!pat1.test(code)){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter Pincode Only (6 digits)</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+
+    }if(mobile==''){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter mobile no</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+
+    }else if(!pattern.test(mobile)){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter mobile no. only 10 digits </p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+
+
+    }
+  })
+</script>

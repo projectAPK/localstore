@@ -1,0 +1,137 @@
+	{{>sh}}
+    <link rel="stylesheet" href="./pr.css">
+<div class="inner-block" style='overflow-y:scroll;height:40rem;'>
+    <div class="product-block">
+    	
+
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+</div>
+</div>
+<!--slider menu-->
+   {{>sidebar}}
+	<div class="clearfix"> </div>
+</div>
+<div id="myModal" class="modal">
+    <div class="load-table" style="background-color: white;width:40rem;height:50%;margin:auto;padding:20px;">
+
+    </div>
+
+</div
+
+<!--slide bar menu end here-->
+
+<!--scrolling js-->
+    <script src="./jquery.min.js"></script>
+		<script src="./admin-js/jquery.nicescroll.js"></script>
+    <script src="./admin-js/bootstrap.js"></script>
+		<script src="./admin-js/scripts.js"></script>
+		<script type="text/javascript" src="./admin-js/nivo-lightbox.min.js"></script>
+      <script src='./jquery.min.js'></script>
+      <script>
+          $(document).ready(function(){
+            function loadproducts(){
+  
+ 
+    $.ajax({
+      url:'/total-selling',
+      type:"POST",
+      success:function(data){
+      let output=`<div class="product-block">
+    	<div class="pro-head">
+    		<h2>Products Selling</h2>
+    	</div>`
+      
+      data.forEach(ele=>{
+        output=output.concat(`<div class="col-md-2 product-grid" data-id=${ele.productId._id} style='width:15rem;height:8rem;margin-bottom:5rem;'>
+    		<div class="product-items">
+	    		    <div class="project-eff">
+						<div id="nivo-lightbox-demo"> <p> <a href="#"data-lightbox-gallery="gallery1" id="nivo-lightbox-demo"><span class="rollover1"> </span> </a></p></div>     
+							<img class="img-responsive" src="${ele.productId.images[0]}"alt="" style='width:16rem;height:8rem;'>
+					</div>
+	    		<div class="produ-cost">
+	    			<h6>${ele.productId.product}</h6>
+	    			
+	    		</div>
+    		</div>
+    	</div>`);
+      })
+      output=output.concat(`</div>`)
+      $('.inner-block').html(output)
+      }
+    })
+  }
+  loadproducts()
+          })
+    $(document).on('click','.product-grid',function(){
+        let categoryid=$(this).data('id')
+    
+        $.ajax({
+            url:'/category-selling',
+            type:"POST",
+            data:{categoryid},
+            success:function(data){
+                
+                let c=1
+                      let output=`<h2 style='text-align:center;'><b>${data[0].category.categoryname} selling</b></h2><hr><table id='shop-order'><tr>
+                          <th>Sr No</th>
+                          <th>Customer name</th>
+                          <th>Mobile no</th>
+                          <th>Product</th>`
+                    data.forEach(ele=>{
+                        console.log(ele.sub_category.category_name)
+                       
+                        if(ele.sub_category.category_name!='kg'){
+                           if(c==1){
+                            ele.sub_category.category_name.forEach(cat_name=>{
+                                output=output.concat(`<th>${cat_name}</th>`)
+                            })
+                            output=output.concat(`<th>Qty</th>
+                                                  <th>Date</th></tr>`)
+                           }
+                           output=output.concat(`<tr><td>${c}</td>
+                                                    <td>${ele.userId.name}</td>
+                                                    <td>${ele.customerId.mobile_no}</td>
+                                                    <td>${ele.productId.product}</td>`)
+                                                    ele.sub_category.category_value.forEach(cat_val=>{
+                                                        output=output.concat(`<td>${cat_val}</td>`);
+                                                    })
+                                                    
+                                                    output=output.concat(`<td>${ele.qty}</td><td>${ele.date_time}</td></tr>`);
+                        }else{
+                           if(c==1){
+                            ele.sub_category.category_name.forEach(cat_name=>{
+                                output=output.concat(`<th>${cat_name}</th>`)
+                            })
+                              output=output.concat(`
+                                                  <th>Date</th></tr>`)
+                           }
+                           output=output.concat(`<tr><td>${c}</td>
+                                                    <td>${ele.userId.name}</td>
+                                                    <td>${ele.customerId.mobile_no}</td>
+                                                    <td>${ele.productId.product}</td>`)
+                                                    ele.sub_category.category_value(cat_val=>{
+                                                        output=output.concat(`<td>${cat_val}</td>`);
+                                                    })
+                                                    
+                                                    output=output.concat(`</tr>`);
+
+                        }
+c++;
+                    })
+                    output=output.concat(`<table>`);
+                        $('.load-table').html(output);
+                        $('#myModal').show();
+            }
+            
+        })
+        $('#myModal').click(function(){
+            $(this).hide()
+        })
+    })
+      </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+
+
+
+
+ #upload_button input[type=file] {
+  display:none;
+  
+  }
+
+  #upload_button  label {
+  
+  height:3rem;
+  width:5rem;
+  margin-right:5px;
+  align-items: center;
+  
+  border:2px solid grey;
+  border-radius: 6px;
+  
+
+  }
+#upload_button label i{
+margin-top: 10px;
+font-size: 50px;
+font-weight: 100;
+
+
+color:grey;
+z-index:1;
+margin:25px;
+position: absolute;
+}
+#imges{
+  display: flex;
+}
+
+
+/* Create three equal columns that sits next to each other */
+#imges div{
+  
+  flex: 3rem;
+}
+
+
+
+
+  .fa-remove{
+    display: none;
+    font-size: 30px;
+ 
+
+  }
+
+

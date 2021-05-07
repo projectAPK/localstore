@@ -1,0 +1,50 @@
+<link rel="stylesheet" href="./login.css">
+
+<div id="myModal" class="modal">
+<div class="container" >
+  <form action='/' method='post' class="register signUp">
+    <h3>Create Your Account</h3>
+    <p id='p-error' style="display:none;color: red;border:1px solid red;background-color:pink;padding:3px;">
+    </p>
+    <input type="text" placeholder="Full Name" name='name' id='name' autocomplete='off' reqired />
+    <input class="w100" type="email" name="email" id="s-email-address" placeholder="Insert eMail" reqired autocomplete='off' />
+    <input type="password"  name="password" id='s-password' placeholder="Insert Password" reqired />
+    <input type="password"  name='cpassword' id='s-confirm-password' placeholder="Verify Password" reqired />
+    <input type="hidden" name="role" value="0">
+    <button class="form-btn sx log-in" type="button" >Log In</button>
+    <button class="form-btn dx" type="submit">Sign Up</button>
+  </form>
+  <form   class="signIn">
+    <h3>Welcome</br>Back !</h3>
+    
+  
+    <input type="email" placeholder="Email" class='login-email' reqired />
+    <input type="password" placeholder="Password" class="login-password" reqired />
+    
+    <button class="form-btn sx back" type="button">Back</button>
+    <button class="form-btn dx" type="submit" id='login-btn'>Log In</button>
+  <p id='e-error' style="display:none;color: red;border:1px solid red;background-color:pink;padding:3px;"></p>
+  </form>
+  
+</div>
+</div>
+
+
+<script src="./jquery.min.js"></script>
+<script src="./signup-validation.js"></script>
+<script src="./login-ajax.js"></script>
+<script>
+$(".log-in").click(function(){
+  $(".signIn").addClass("active-dx");
+  $(".signUp").addClass("inactive-sx");
+  $(".signUp").removeClass("active-sx");
+  $(".signIn").removeClass("inactive-dx");
+});
+
+$(".back").click(function(){
+  $(".signUp").addClass("active-sx");
+  $(".signIn").addClass("inactive-dx");
+  $(".signIn").removeClass("active-dx");
+  $(".signUp").removeClass("inactive-sx");
+});
+</script>

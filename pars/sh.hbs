@@ -1,0 +1,75 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Shop Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Shoppy Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<link href="./bootstrap.min.css" rel="stylesheet" type="text/css" media="all">
+<link rel="stylesheet" type="text/css" href="./magnific-popup.css">
+<link href="./seller-style.css" rel="stylesheet" type="text/css" media="all"/>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link href='//fonts.googleapis.com/css?family=Carrois+Gothic' rel='stylesheet' type='text/css'>
+<link href='//fonts.googleapis.com/css?family=Work+Sans:400,500,600' rel='stylesheet' type='text/css'>
+<!--//skycons-icons-->
+</head>
+<body>
+    <div class="page-container">	
+   <div class="left-content">
+	   <div class="mother-grid-inner">
+            <!--header start here-->
+				<div class="header-main">
+					<div class="header-left">
+							<div class="logo-name">
+									 <a href="/ourorders"> <h1>Shop</h1> 
+									<!--<img id="logo" src="" alt="Logo"/>--> 
+								  </a> 								
+							</div>
+							<!--search-box-->
+								<div class="">
+								
+								</div><!--//end-search-box-->
+						
+						 </div>
+						
+							<div class="profile_details">		
+								<ul>
+									<h4 id='shop-user' style="background-color:rgb(255, 153, 0);border-radius:5px;padding:3px;">Priya</h4>
+									<li class="dropdown profile_details_drop">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+											<div class="profile_img">	
+												 
+												<div class="user-name">
+													
+													<a href="/shop-logout"><i class="fa fa-sign-out"></i></a>
+												</div>
+												<div class="clearfix"></div>	
+											</div>	
+										</a>
+										
+									</li>
+								</ul>
+							</div>
+							<div class="clearfix"> </div>				
+						</div>
+				     <div class="clearfix"> </div>	
+				</div>
+<script src="./jquery.min.js"></script>
+				<script>
+					$(document).ready(function(){
+						$.ajax({
+							url:'/shop-auth',
+							type:'POST',
+							success:function(data){
+							$('#shop-user').text(`Welcome ${data.name}`)
+							}
+						})
+					})
+				</script>

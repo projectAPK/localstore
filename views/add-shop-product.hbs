@@ -1,0 +1,241 @@
+	{{>sh}}
+
+<div class="inner-block">
+    <div class="product-block">
+    	<div class="pro-head" >
+    		<h2>Products</h2>
+    	</div>
+         <form action='/product' method='POST' id='productform'class="col-md-8" >
+
+            <p id='msg'></p>
+             <div class="form-group col-sm-12">
+                  <label for="product-category">Category</label>
+                
+                  <select class="form-control" id='product-category' name='product_category'>
+                     <option selected disabled>Select Category</option>
+                  </select>
+                </div>
+             <div class="form-group col-sm-12">
+                  <label for="product-name">Product</label>
+                
+                  <select class="form-control" id='products' name='product'>
+                     <option selected disabled>Select Products</option>
+                  </select>
+                </div>
+                <div id="sub-category-div">
+
+                </div>
+
+               
+                 <div class="form-group col-sm-2">
+                  <label for="gst">GST</label>
+                  <input type="number" class="form-control" name='gst' id="gst" placeholder="Gst(%)">
+                </div>
+                
+                <div class="form-group col-sm-3">
+                  <label for="price">Price</label>
+                  <input type="number" class="form-control" name='price' id="price" placeholder="Price*">
+                </div>
+                <div class="form-group col-sm-3">
+                  <label for="total_price">Total Price(GST)</label>
+                  <input type="text" class="form-control" id="total_price" name="total_price" placeholder="Total Price" readonly>
+                </div>
+                 <div class="form-group col-sm-4">
+                  <label for="Qty">Quantity</label>
+                  <input type="number" class="form-control" name='qty' id="qty" placeholder="qty*">
+                </div>
+                <div class="form-group col-sm-12">
+                  <label for="batchid">Batch Id</label>
+                  <input type="text" class="form-control" name='batchid' id="batchid" placeholder="Batch Id">
+                </div>
+                
+                <div class="col-md-12">
+               <button type="submit" class="btn btn-primary" id='add-product' style="margin:20px;">Add Product</button>
+    
+            </div>
+            </form> 
+           
+
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>sidebar}}
+	<div class="clearfix"> </div>
+</div>
+
+<!--slide bar menu end here-->
+
+<!--scrolling js-->
+    <script src="./jquery.min.js"></script>
+		<script src="./admin-js/jquery.nicescroll.js"></script>
+    <script src="./admin-js/bootstrap.js"></script>
+		<script src="./admin-js/scripts.js"></script>
+		<script type="text/javascript" src="./admin-js/nivo-lightbox.min.js"></script>
+
+<script src="./file.js"></script>
+
+  <script>
+    $(document).ready(function(){
+     
+           $.ajax({
+            url:'/load-all-category',
+            type:'POST',
+            success:function(data){
+                    data.forEach(element=>{
+                        $('#product-category').append(`<option value=${element._id}>${element.categoryname}</option>`)
+                       
+                    })
+            
+           }
+        });
+      $('#product-category').change(function(){
+      let id=$(this).val();
+      $.ajax({
+            url:'/load-all-products',
+            type:'POST',
+            data:{id},
+            success:function(data){
+            
+                    data.forEach(element=>{
+                        $('#products').append(`<option value=${element._id}>${element.product}</option>`)
+                    })
+      
+           }
+        });
+      
+      })
+        
+        $('#productform').submit(function(e){
+         let pcategory=$('#product-category').val();
+         let product=$('#products').val();
+         let gst=$('#gst').val()
+         let price=$('#price').val()
+         let qty=$('#qty').val();
+         let batchid=$('#batchid').val();
+          function Close(endtime) {
+            setTimeout(() => {
+                $('#p-error').css("display","none");
+               
+            },endtime)
+        } 
+         if(pcategory=='' || pcategory==null){
+             document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Select Category</p>`;
+   
+             Close(5000);
+             e.preventDefault();
+             return;  
+
+         }
+         if(product=='' || product==null){
+          document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Select Product</p>`;
+   
+          Close(5000);
+          e.preventDefault();
+           return;  
+         }
+         if(gst==''){
+        document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter gst</p>`;
+   
+        Close(5000);
+       e.preventDefault();
+     return;  
+         }
+         if(price==''){
+             document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter Price...</p>`;
+   
+     Close(5000);
+     e.preventDefault();
+     return;  
+
+         }
+         if(qty==''){
+             document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter Qty..</p>`;
+   
+             Close(5000);
+              e.preventDefault();
+              return;  
+
+         }
+         if(batchid==''){
+             document.getElementById('msg').innerHTML=`<p id='p-error' style="color: red;border:1px solid red;background-color:pink;padding:3px;text-align:center;">Enter batch id</p>`;
+   
+           Close(5000);
+           e.preventDefault();
+           return;  
+
+         }
+
+     
+         
+        })
+         $('#product-category').change(function(){
+          let id=$(this).val();
+        $.ajax({
+          url:'/load-single-sub-category',
+          type:'POST',
+          data:{id},
+          success:function(data){
+            let sub_category='';
+            console.log(data);
+            
+            let a=true
+            let ab=true;
+            let cnt=0;
+            let i=0;
+            data.forEach(sub_title=>{
+              
+                  while(a){
+                    console.log(sub_title)
+                    let cat_name=sub_title.subcategory.category_name[i];
+                          if(cat_name=='' || cat_name==undefined){
+                           a=false
+                          }else{
+                          sub_category=sub_category.concat(`<div class="form-group col-sm-6 sub1">
+                            <input type='hidden' name='category_name' value=${sub_title.subcategory.category_name[i]}>
+                            <label>Select ${sub_title.subcategory.category_name[i]}</label>
+                            <select name='sub_category' id='sub_category' class="form-control">
+                            <option selected disabled>Select ${sub_title.subcategory.category_name[i]}</option>`);
+                           i++; 
+                           
+                          while(ab){
+
+                          let cat_value=sub_title.subcategory.category_value[cnt];
+                          console.log(`${cat_value} ${cnt}`);
+                          if(cat_value=='' || cat_value==undefined){
+                            a=false;
+                          }else{
+                            let sub_value=cat_value.split(',');
+                            sub_value.forEach(val=>{
+                                sub_category=sub_category.concat(`<option value='${val}'>${val}</option>`);
+                               
+                            });
+                            cnt++;
+                          }
+                          break;
+                          }
+                          }        
+                            
+                           sub_category=sub_category.concat(`</select>
+                           </div>`);               
+                  }
+            })
+            console.log(sub_category);
+       $('#sub-category-div').html(sub_category);
+          }
+
+        })
+      })
+      
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+{{>admin_header}}
+<div class="inner-block">
+    <div class="product-block">
+    	<div class="pro-head" >
+    		<h2>Add Product</h2>
+    	</div>
+
+
+           <div class="col-md-6">
+    
+          
+            <form action='/admin-product' method='POST' id='input-form' enctype="multipart/form-data" >
+             <p id="msg"></p>
+             <div class="form-group col-sm-12 ">
+               <label>Select Category</label>
+               <select name='categoryname' id='category' class="form-control">
+                 <option selected disabled>Select Category</option>
+               </select>
+             </div>
+                   
+
+             <div class="form-group col-sm-12">
+                  <label for="product-name">Product</label>
+                  <input type="text" class="form-control" name='product' id="product" placeholder="Add products">
+                </div>
+                 <div class="form-group col-sm-12">
+                  <label for="details">Details About Product</label>
+                  <textarea type="text" class="form-control" name='details' id="detail"></textarea>
+                </div>
+                
+             <div class="row"> 
+                <div id="upload_button" class="col-md-offset-1 col-md-2" style="margin-top:0px;margin-right:10px;">
+                    
+                          <input type="file" id='input' name='images' multiple/>
+                    
+                 </div>
+                          <p id='upload-error'></p>
+
+                     
+            </div>
+            <br>
+          
+                    &nbsp;&nbsp;&nbsp;&nbsp;<button type="submit" class="btn btn-primary" style='item-align:center;margin-bottom:20px;' id='add-product'>Add Product</button>
+    
+            
+            </form>
+           
+       
+       
+       
+      <div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>admin_sidebar}}
+	<div class="clearfix"> </div>
+</div>
+
+         
+      
+<script src="./jquery.min.js"></script>
+<script src="./file.js"></script>
+
+  <script>
+    $(document).ready(function(){
+        $.ajax({
+            url:'/load-all-category',
+            type:'POST',
+            success:function(data){
+                    data.forEach(element=>{
+                        $('#category').append(`<option value=${element._id}>${element.categoryname}</option>`)
+                    })
+              }
+        });
+        $('#input-form').submit(function(e){
+
+            function Close(endtime) {
+            setTimeout(() => {
+                $('#p-error').css("display","none");
+               
+            },endtime)
+        } 
+          let category=$('#category').val()
+          let product=$('#product').val();
+          let detail=$('#detail').val();
+       
+          if(category=='' ||category==null){
+             document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Select Catgory</p>`;
+            Close(5000)
+            e.preventDefault()
+            return;
+  
+          }
+          if(product==''){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;"> Enter Product Name</p>`;
+            Close(5000)
+            e.preventDefault();
+            return;
+  
+
+          }
+          if(detail==''){
+              document.getElementById('msg').innerHTML=`<p id='p-error' style="color:red;border:1px solid red;background-color:pink;padding:3px;">Enter Description</p>`;
+            Close(5000)
+            e.preventDefault()
+            return;
+  
+
+          }
+              $('#msg').html(`<p id='p-error' style="color:white;border:1px solid green;background-color:lightgreen;padding:3px;">Product added  Successfully..</p>`)
+               Close(3000);
+          
+
+        })
+     
+      
+    });
+
+</script>
+</body>
+</html>

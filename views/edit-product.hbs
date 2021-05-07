@@ -1,0 +1,97 @@
+	{{>admin_header}}
+    {{>uploadcss}}
+
+<div class="inner-block">
+    <div class="product-block">
+    	<div class="pro-head" >
+    		<h2>Edit Product</h2>
+    	</div>
+   
+    
+
+             <div class="col-md-6">
+            
+          
+          
+            <form action='/updated-product' method='POST'  class="row" id='input-form' enctype="multipart/form-data">
+            
+                <div class="form-group col-sm-12">
+          
+                  <label for="product-name">Product name</label>
+                 <input type="text" class='form-control'  id="company-name" name="product" value="{{product.[0].product}}"/>
+                
+                 <input type="hidden" id='productid' name="productid" value="{{product.[0]._id}}"/>
+                
+                </div>
+                   <div class="form-group col-sm-12">
+                   <label for="category">Description</label>
+                   <input type="text" class="form-control" value='{{product.[0].description}}' name="category" id="company-name" placeholder="Description*" style="height:5rem;padding:0px;">
+                  </div>
+                  <div>
+                  {{#each product.[0].images}}
+                      <div class="col-md-2" id='upload_button' >
+
+                      <label id='upload-label'>
+                        <input type="hidden" name="imgsrc" value="{{this}}" multiple>
+                       <img src="{{this}}" class="img" style="width:3.3rem;height:2.8rem;">
+                      <input type="file" name="images" class="imges" multiple>
+                      </label>
+
+                  </div>
+                  
+                
+                {{/each}}
+                  </div>
+                                    
+               
+             
+         <div class="col-md-12">
+           <br>   
+     <button type="submit" class="btn btn-primary create-account" id='add-product'>Update Product</button>
+    </div>
+    <hr>
+            
+              
+            </form>
+           
+        </div>
+<div class="clearfix"> </div>
+    </div>
+</div>
+
+
+<!--copy rights start here-->
+
+<!--COPY rights end here-->
+</div>
+</div>
+<!--slider menu-->
+   {{>admin_sidebar}}
+	<div class="clearfix"> </div>
+</div>
+ 
+  
+<script src="./jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $('.imges').change(function(event){
+        
+        const imagesArray=event.target.files[0];
+        let src=window.URL.createObjectURL(imagesArray)
+        let uploadDiv=$(this).parent().parent().find('.img')
+               console.log(uploadDiv)
+        uploadDiv[0].src=src
+      
+        
+        
+         
+
+      })
+    })
+</script>
+
+<script>
+  
+</script>
+</body>
+</html>
